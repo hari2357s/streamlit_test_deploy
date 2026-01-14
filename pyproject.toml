@@ -1,0 +1,18 @@
+[tool.ruff.lint]
+select = [ "UP", "E", "F", "B", "SIM", "I", "PERF", "PL"]
+ignore = ["E501", "PLR0913"]
+
+[tool.ruff]
+exclude = ["myapp/Test"]
+
+# E - pycodestyle
+# B - flake8-bugbear
+# SIM - flake8-simplify
+# F - PyFlakes
+# UP - PyUpgrade
+# I - isort
+# PL - like PyLint
+# PERF - performance issues 
+
+# E501 - line-too-long
+# PLR0913 - too-many-arguments 

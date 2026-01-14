@@ -1,0 +1,7 @@
+*.sqlite3-query
+*.db
+*.db-journal
+*.pyc
+*.*_cache/
+chatvenv/
+__pycache__/
