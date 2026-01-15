@@ -3,5 +3,6 @@
 *.db-journal
 *.pyc
 *.*_cache/
+data/
 chatvenv/
 __pycache__/

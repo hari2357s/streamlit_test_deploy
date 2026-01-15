@@ -1,18 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[project]
+name = "Talksy"
+version = "0.1.0"
+authors = [
+  { name="Hari Karthick", email="hari.ksp@zohointern.com" },
+]
+description = "A simple chat app to explore streamlit and software engineering basics"
+dependencies = ["streamlit"]
+requires-python = ">=3.10"
+
 [tool.ruff.lint]
 select = [ "UP", "E", "F", "B", "SIM", "I", "PERF", "PL"]
 ignore = ["E501", "PLR0913"]
 
 [tool.ruff]
 exclude = ["myapp/Test"]
-
-# E - pycodestyle
-# B - flake8-bugbear
-# SIM - flake8-simplify
-# F - PyFlakes
-# UP - PyUpgrade
-# I - isort
-# PL - like PyLint
-# PERF - performance issues 
-
-# E501 - line-too-long
-# PLR0913 - too-many-arguments 
