@@ -25,7 +25,7 @@ class NewAccountPage:
         :param self: Description
         """
         if st.button("Okayy"):
-            st.switch_page("Pages/login.py")
+            st.switch_page("src/myapp/pages/login.py")
 
     def __init__(self):
         """
@@ -62,7 +62,7 @@ class NewAccountPage:
                     else:
                         toast_warning("Something went wrong!")
 
-            st.page_link("pages/login.py", label="Already have an Account")
+            st.page_link("src/myapp/pages/login.py", label="Already have an Account")
 
 
 def main():

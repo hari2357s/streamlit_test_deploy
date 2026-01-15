@@ -62,7 +62,7 @@ class Login:
                     with st.status("Connecting to your account", width="stretch"):
                         time.sleep(1)
                     st.rerun()
-            st.page_link("pages/new_account.py", label="Create New Account")
+            st.page_link("src/myapp/pages/new_account.py", label="Create New Account")
 
 
 def main():
