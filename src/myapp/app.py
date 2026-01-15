@@ -3,9 +3,9 @@ Docstring for myapp.App
 """
 
 import streamlit as st
-from src.myapp.common.container import Container
-from src.myapp.common.database.test_db import Test_Database
-from src.myapp.common.state_manager import StateManager
+from myapp.common.container import Container
+from myapp.common.database.test_db import Test_Database
+from myapp.common.state_manager import StateManager
 
 
 def main():
