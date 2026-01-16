@@ -1,6 +1,15 @@
 """
 Docstring for myapp.App
 """
+import sys
+import os
+
+# Force the parent of 'myapp' (i.e., 'src/') to be in sys.path
+CURRENT_FILE = os.path.abspath(__file__)
+SRC_PATH = os.path.dirname(os.path.dirname(CURRENT_FILE))  # goes up two levels to 'src'
+
+if SRC_PATH not in sys.path:
+    sys.path.insert(0, SRC_PATH)
 
 import streamlit as st
 from common.container import Container
