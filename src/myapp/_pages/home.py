@@ -57,7 +57,8 @@ class Home:
         :param self: Description
         """
         users = sm.get_container().chat_service.get_not_in_chat(self.user.userID)
-        users_dict = {item[0]: item[1] for item in users.content}
+        st.write(users.content)
+        users_dict = {item[1]: item[0] for item in users.content}
 
         selected_users = st.multiselect("Users", options=users_dict.keys())
         with st.container(horizontal=True):
