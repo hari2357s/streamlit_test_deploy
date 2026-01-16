@@ -24,14 +24,14 @@ class MessageRepository(IMessageRepo):
                                   ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                   MESSAGE TEXT NOT NULL,
                                   USERID INTEGER NOT NULL,
-                                  chat_id INTEGER ,
+                                  CHATID INTEGER ,
                                   GROUPID INTEGER,
                                   TYPE TEXT NOT NULL,
                                   SENTAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                   DELIVEREDAT TIMESTAMP ,
                                   SEENAT TIMESTAMP ,
                                   FOREIGN KEY(USERID) REFERENCES USER(USERID) ON DELETE CASCADE,
-                                  FOREIGN KEY(chat_id) REFERENCES CHAT(ID) ON DELETE CASCADE,
+                                  FOREIGN KEY(CHATID) REFERENCES CHAT(ID) ON DELETE CASCADE,
                                   FOREIGN KEY(GROUPID) REFERENCES GROUPS(ID) ON DELETE CASCADE
                                 )""")
 

@@ -3,6 +3,7 @@
 *.pyc
 *.*_cache/
 chatvenv/
+*.db
 __pycache__/
 dist/
 src/myapp.egg-info/
