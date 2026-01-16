@@ -4,7 +4,7 @@ Docstring for myapp.Modules.group.group_repository
 
 from collections.abc import Iterator
 
-from src.myapp.common.database import IDatabase
+from myapp.common.database import IDatabase
 
 from .group_repo import Group, IGroupRepo
 

@@ -4,12 +4,12 @@ Docstring for myapp.Pages.new_account
 
 import streamlit as st
 
-from src.myapp.common.constants import (
+from myapp.common.constants import (
     HTTP_INTERNAL_SERVER_ERROR,
     HTTP_OK,
 )
-from src.myapp.common.state_manager import StateManager as sm
-from src.myapp.common.ui_components import my_text, success, toast_warning
+from myapp.common.state_manager import StateManager as sm
+from myapp.common.ui_components import my_text, success, toast_warning
 
 
 class NewAccountPage:
@@ -25,7 +25,7 @@ class NewAccountPage:
         :param self: Description
         """
         if st.button("Okayy"):
-            st.switch_page("src/myapp/pages/login.py")
+            st.switch_page("myapp/pages/login.py")
 
     def __init__(self):
         """
@@ -62,7 +62,7 @@ class NewAccountPage:
                     else:
                         toast_warning("Something went wrong!")
 
-            st.page_link("src/myapp/pages/login.py", label="Already have an Account")
+            st.page_link("myapp/pages/login.py", label="Already have an Account")
 
 
 def main():

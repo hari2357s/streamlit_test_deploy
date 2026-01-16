@@ -8,10 +8,10 @@ from datetime import datetime
 import pytz
 import streamlit as st
 
-from src.myapp.common.constants import HTTP_OK
-from src.myapp.common.state_manager import CurrentChat
-from src.myapp.common.state_manager import StateManager as sm
-from src.myapp.common.ui_components import my_text, toast_success, toast_warning
+from myapp.common.constants import HTTP_OK
+from myapp.common.state_manager import CurrentChat
+from myapp.common.state_manager import StateManager as sm
+from myapp.common.ui_components import my_text, toast_success, toast_warning
 
 
 def get_time():

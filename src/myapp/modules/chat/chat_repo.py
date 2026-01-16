@@ -7,8 +7,8 @@ from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
 from typing import Any, NamedTuple
 
-from src.myapp.common.repository import IRepository
-from src.myapp.common.response import Response
+from myapp.common.repository import IRepository
+from myapp.common.response import Response
 
 
 class Chat(NamedTuple):

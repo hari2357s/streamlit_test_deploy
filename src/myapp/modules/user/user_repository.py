@@ -4,7 +4,7 @@ Docstring for myapp.Modules.user.user_repository
 
 import sqlite3
 
-from src.myapp.common.database import IDatabase
+from myapp.common.database import IDatabase
 
 from .user_repo import IUserRepo, User
 

@@ -5,7 +5,7 @@ Docstring for myapp.Modules.chat.chat_repository
 from collections.abc import Iterator
 from typing import Any
 
-from src.myapp.common.database import IDatabase
+from myapp.common.database import IDatabase
 
 from .chat_repo import Chat, IChatRepo
 

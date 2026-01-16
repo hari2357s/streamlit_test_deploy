@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 import streamlit as st
 
-from src.myapp.modules.user import User
+from myapp.modules.user import User
 
 from .container import Container
 

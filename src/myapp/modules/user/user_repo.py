@@ -9,8 +9,8 @@ from datetime import datetime
 from hashlib import sha512
 from typing import NamedTuple
 
-from src.myapp.common.repository import IRepository
-from src.myapp.common.response import Response
+from myapp.common.repository import IRepository
+from myapp.common.response import Response
 
 
 class User(NamedTuple):

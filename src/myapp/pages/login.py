@@ -6,12 +6,12 @@ import time
 
 import streamlit as st
 
-from src.myapp.common.constants import (
+from myapp.common.constants import (
     HTTP_INTERNAL_SERVER_ERROR,
     HTTP_OK,
 )
-from src.myapp.common.state_manager import StateManager as sm
-from src.myapp.common.ui_components import my_text, toast_success, toast_warning
+from myapp.common.state_manager import StateManager as sm
+from myapp.common.ui_components import my_text, toast_success, toast_warning
 
 
 class Login:
@@ -62,7 +62,7 @@ class Login:
                     with st.status("Connecting to your account", width="stretch"):
                         time.sleep(1)
                     st.rerun()
-            st.page_link("src/myapp/pages/new_account.py", label="Create New Account")
+            st.page_link("myapp/pages/new_account.py", label="Create New Account")
 
 
 def main():

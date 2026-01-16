@@ -18,11 +18,11 @@ def main():
         container: Container = Container(db)
         st.session_state.Container = container
 
-    auth_pages = [st.Page("src/myapp/pages/home.py", title="Talksy")]
+    auth_pages = [st.Page("myapp/pages/home.py", title="Talksy")]
 
     pages = [
-        st.Page("src/myapp/pages/login.py", title="Login"),
-        st.Page("src/myapp/pages/new_account.py", title="New Account"),
+        st.Page("myapp/pages/login.py", title="Login"),
+        st.Page("myapp/pages/new_account.py", title="New Account"),
     ]
 
     if StateManager.get_user() is not None and StateManager.get_authenticated():

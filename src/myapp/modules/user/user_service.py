@@ -2,7 +2,7 @@
 Docstring for myapp.Modules.user.user_service
 """
 
-from src.myapp.common.constants import (
+from myapp.common.constants import (
     HTTP_BAD_REQUEST,
     HTTP_FILE_NOT_FOUND,
     HTTP_INTERNAL_SERVER_ERROR,
@@ -10,7 +10,7 @@ from src.myapp.common.constants import (
     MIN_PASSWORD_LENGTH,
     MIN_USERNAME_LENGTH,
 )
-from src.myapp.modules.user import IUserRepo, UserResponse
+from myapp.modules.user import IUserRepo, UserResponse
 
 
 class UserServices:

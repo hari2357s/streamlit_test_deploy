@@ -6,3 +6,6 @@
 data/
 chatvenv/
 __pycache__/
+dist/
+src/myapp.egg-info/
+build_test.py

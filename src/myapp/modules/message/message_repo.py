@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import NamedTuple
 
-from src.myapp.common.repository import IRepository
-from src.myapp.common.response import Response
+from myapp.common.repository import IRepository
+from myapp.common.response import Response
 
 
 class Message(NamedTuple):

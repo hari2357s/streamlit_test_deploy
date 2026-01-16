@@ -4,7 +4,7 @@ Docstring for myapp.Modules.message.message_repository
 
 from collections.abc import Iterator
 
-from src.myapp.common.database import IDatabase
+from myapp.common.database import IDatabase
 
 from .message_repo import IMessageRepo, Message
 

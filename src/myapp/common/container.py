@@ -1,11 +1,11 @@
 """Docstring for container"""
 
-from src.myapp.common.database import IDatabase
+from myapp.common.database import IDatabase
 
-from src.myapp.modules.chat import ChatRepository, ChatServices
-from src.myapp.modules.group import GroupRepository, GroupServices
-from src.myapp.modules.message import MessageRepository, MessageServices
-from src.myapp.modules.user import UserRepository, UserServices
+from myapp.modules.chat import ChatRepository, ChatServices
+from myapp.modules.group import GroupRepository, GroupServices
+from myapp.modules.message import MessageRepository, MessageServices
+from myapp.modules.user import UserRepository, UserServices
 
 
 class Container:
