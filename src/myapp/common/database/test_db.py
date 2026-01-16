@@ -7,17 +7,22 @@ from .database import IDatabase
 class Test_Database(IDatabase):
     def __init__(self, db_path = None):
         """
-        Initializes a test database.
+        Initializes the test database.
 
-        If db_path is None or not writable, defaults to Streamlit Cloud's /tmp folder.
+        - Uses /tmp/data/test.db in Streamlit Cloud (writable)
+        - Falls back to ./data/test.db locally
         """
-        # Use a default writable folder in Streamlit Cloud
+        # Detect if running in Streamlit Cloud
+        running_on_cloud = os.environ.get("STREAMLIT_SERVER_PORT") is not None
+
         if db_path is None:
-            db_dir = os.path.join("/tmp", "data")  # always writable
+            if running_on_cloud:
+                db_dir = os.path.join("/tmp", "data")
+            else:
+                db_dir = os.path.join(os.getcwd(), "data")
             os.makedirs(db_dir, exist_ok=True)
             db_path = os.path.join(db_dir, "test.db")
         else:
-            # Ensure folder exists if custom path is provided
             folder = os.path.dirname(db_path)
             if folder:
                 os.makedirs(folder, exist_ok=True)
