@@ -2,25 +2,25 @@ import os
 import sqlite3
 import contextlib
 from collections.abc import Iterator
-
 from .database import IDatabase
 
 class Test_Database(IDatabase):
-    def __init__(self, db_path=None):
+    def __init__(self, db_path = None):
         """
         Initializes a test database.
 
-        :param db_path: Path to the SQLite database file.
-                        If None, defaults to a writable location in Streamlit Cloud.
+        If db_path is None or not writable, defaults to Streamlit Cloud's /tmp folder.
         """
-        # Default path: writable temp folder in Streamlit Cloud
+        # Use a default writable folder in Streamlit Cloud
         if db_path is None:
-            db_dir = os.path.join("/tmp", "data")  # /tmp is writable in Streamlit Cloud
+            db_dir = os.path.join("/tmp", "data")  # always writable
             os.makedirs(db_dir, exist_ok=True)
             db_path = os.path.join(db_dir, "test.db")
         else:
-            # Ensure the folder exists if a custom path is provided
-            os.makedirs(os.path.dirname(db_path), exist_ok=True)
+            # Ensure folder exists if custom path is provided
+            folder = os.path.dirname(db_path)
+            if folder:
+                os.makedirs(folder, exist_ok=True)
 
         self._db_path = db_path
         self._conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -36,13 +36,6 @@ class Test_Database(IDatabase):
 
     @contextlib.contextmanager
     def transaction(self) -> Iterator[sqlite3.Cursor]:
-        """
-        Context manager for SQLite transactions.
-
-        Usage:
-            with db.transaction() as cursor:
-                cursor.execute(...)
-        """
         cursor = self.cursor()
         try:
             yield cursor
