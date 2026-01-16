@@ -6,6 +6,9 @@ import streamlit as st
 from myapp.common.container import Container
 from myapp.common.database.test_db import Test_Database
 from myapp.common.state_manager import StateManager
+import sys
+
+st.write("sys.path[0] =", sys.path[0])
 
 
 def main():
