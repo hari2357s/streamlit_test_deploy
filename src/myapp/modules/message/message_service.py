@@ -82,3 +82,19 @@ class MessageServices:
         except Exception as exc:
             return MessageResponse(500, str(exc.args), [])
         return MessageResponse(200, "Message deleted successfully", [])
+    
+    def update_msg(self, updated_msg: str, msg_id: int):
+        '''
+        Docstring for update_msg
+        
+        :param self: Description
+        :param updated_msg: Description
+        :type updated_msg: str
+        :param msg_id: Description
+        :type msg_id: int
+        '''
+        try:
+            self.__msg_repo.update_msg(updated_msg, msg_id)
+        except Exception as exc:
+            return MessageResponse(500, str(exc.args), [])
+        return MessageResponse(200, "Message updated successfully", [])

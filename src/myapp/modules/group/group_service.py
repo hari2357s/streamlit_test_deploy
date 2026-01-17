@@ -12,8 +12,28 @@ class GroupServices:
 
     def __init__(self, grp_repo: IGroupRepo) -> None:
         self.__grp_repo = grp_repo
+        
+    def add_members(self, user_id: int, group_id: int, member_ids: tuple[int], role: str):
+        '''
+        Docstring for add_members
+        
+        :param self: Description
+        :param user_id: Description
+        :type user_id: int
+        :param group_id: Description
+        :type group_id: int
+        :param member_ids: Description
+        :type member_ids: tuple[int]
+        '''
+        try:
+            #need to validate whether the user_id is ADMIN or not
+            for member_id in member_ids:
+                self.__grp_repo.add_member(member_id, group_id, role)
+        except Exception:
+            raise
+        return GroupResponse(200, "Successfully group created", [])
 
-    def create_group(self, user_id: int, group_name: str, member_ids: list[int]):
+    def create_group(self, user_id: int, group_name: str, member_ids: tuple[int]):
         """
         Docstring for createGroup
 
@@ -25,10 +45,11 @@ class GroupServices:
         :param memberIDs: Description
         :type memberIDs: list[int]
         """
-        group_id = self.__grp_repo.create(user_id, group_name)
         try:
-            for memeber_id in member_ids:
-                self.__grp_repo.add_members(memeber_id, group_id, "MEMBER")
+            group_id = self.__grp_repo.create(user_id, group_name)
+            self.add_members(user_id, group_id, member_ids, "MEMBER")
+            # for member_id in member_ids:
+            #     self.__grp_repo.add_member(member_id, group_id, "MEMBER")
         except Exception:
             raise
         return GroupResponse(200, "Successfully group created", [])

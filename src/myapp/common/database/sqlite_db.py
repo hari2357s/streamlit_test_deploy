@@ -14,7 +14,7 @@ class SqliteDatabase(IDatabase):
     Docstring for Sqlite_Database
     """
 
-    def __init__(self, db_path="data/chat_app.db"):
+    def __init__(self, db_path="chat_app.db"):
         self._db_path = db_path
         self._conn = sqlite3.connect(db_path, check_same_thread=False)
 

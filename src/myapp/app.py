@@ -1,29 +1,29 @@
 """
 Docstring for myapp.App
 """
-import sys
-import os
 
-# Force the parent of 'myapp' (i.e., 'src/') to be in sys.path
-CURRENT_FILE = os.path.abspath(__file__)
-SRC_PATH = os.path.dirname(os.path.dirname(CURRENT_FILE))  # goes up two levels to 'src'
+# import os
+# import sys
 
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
+# CURRENT_FILE = os.path.abspath(__file__)
+# SRC_PATH = os.path.dirname(os.path.dirname(CURRENT_FILE))
+
+# if SRC_PATH not in sys.path:
+#     sys.path.insert(0, SRC_PATH)
 
 import streamlit as st
-from common.container import Container
-from common.database.test_db import Test_Database
-from common.state_manager import StateManager
+from myapp.common.container import Container
+from myapp.common.database.sqlite_db import SqliteDatabase
+from myapp.common.state_manager import StateManager
 
 
 def main():
     """
     Docstring for main
-    """
+    """ 
 
     if "Container" not in st.session_state:
-        db: Test_Database = Test_Database()
+        db: SqliteDatabase= SqliteDatabase()
         container: Container = Container(db)
         st.session_state.Container = container
 

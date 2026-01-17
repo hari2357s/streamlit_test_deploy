@@ -82,7 +82,7 @@ class IGroupRepo(IRepository):
         """
 
     @abstractmethod
-    def add_members(self, member_id: int, group_id: int, role: str):
+    def add_member(self, member_id: int, group_id: int, role: str):
         """
         Docstring for add_members
 

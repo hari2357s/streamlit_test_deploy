@@ -48,6 +48,17 @@ class MessageRepository(IMessageRepo):
                 """INSERT INTO MESSAGE (MESSAGE, USERID, CHATID, GROUPID, TYPE) VALUES(?,?,?,?,?)""",
                 (msg, user_id, chat_id, grp_id, msg_type),
             )
+            
+    def update_msg(
+        self,
+        updated_msg: str,
+        msg_id: int
+    ):
+        with self.db.transaction() as cur:
+            cur.execute(
+                '''UPDATE MESSAGE SET MESSAGE = ? WHERE ID = ?''',
+                (updated_msg, msg_id,)
+            )
 
     def get_all_msg(
         self, uid: int, chat_id: int | None, group_id: int | None

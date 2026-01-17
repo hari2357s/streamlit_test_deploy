@@ -20,10 +20,10 @@ requires-python = ">=3.10"
 
 [tool.ruff.lint]
 select = [ "UP", "E", "F", "B", "SIM", "I", "PERF", "PL"]
-ignore = ["E501", "PLR0913"]
+ignore = ["E501", "PLR0913", "F401"]
 
 [tool.ruff]
-exclude = ["myapp/Test"]
+exclude = ["test"]
 
 [tool.poetry]
 package-mode = false

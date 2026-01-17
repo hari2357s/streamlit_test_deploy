@@ -94,3 +94,15 @@ class IMessageRepo(IRepository):
         :param msg_id: Description
         :type msg_id: int
         """
+        
+    @abstractmethod
+    def update_msg(self, updated_msg: str, msg_id: int):
+        '''
+        Docstring for update_msg
+        
+        :param self: Description
+        :param edited_msg: Description
+        :type edited_msg: str
+        :param msg_id: Description
+        :type msg_id: int
+        '''

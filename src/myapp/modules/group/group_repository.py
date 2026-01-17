@@ -33,7 +33,7 @@ class GroupRepository(IGroupRepo):
                                   FOREIGN KEY(USERID) REFERENCES USER(USERID) ON DELETE CASCADE,
                                   FOREIGN KEY(GROUPID) REFERENCES GROUPS(ID) ON DELETE CASCADE)""")
 
-    def add_members(self, member_id: int, group_id: int, role: str):
+    def add_member(self, member_id: int, group_id: int, role: str):
         with self.db.transaction() as cur:
             cur.execute(
                 """INSERT INTO USER_GROUP (USERID, GROUPID, ROLE) VALUES(?,?,?)""",
@@ -50,7 +50,7 @@ class GroupRepository(IGroupRepo):
             group_id = cur.lastrowid
             if group_id is None:
                 raise Exception("Error group id is None")
-            self.add_members(user_id, group_id, "ADMIN")
+            self.add_member(user_id, group_id, "ADMIN")
             return group_id
 
     def get_all(self, user_id: int) -> Iterator[Group]:

@@ -1,7 +1,6 @@
 """Docstring for container"""
 
 from myapp.common.database import IDatabase
-
 from myapp.modules.chat import ChatRepository, ChatServices
 from myapp.modules.group import GroupRepository, GroupServices
 from myapp.modules.message import MessageRepository, MessageServices

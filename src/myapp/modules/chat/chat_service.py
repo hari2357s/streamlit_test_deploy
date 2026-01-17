@@ -23,7 +23,10 @@ class ChatServices:
         :return: Description
         :rtype: ChatResponse
         """
-        data = self.__chat_repo.get_all(user_id)
+        try:
+            data = self.__chat_repo.get_all(user_id)
+        except Exception as exc:
+            return ChatResponse(500, "internal server error", exc.args)
         return ChatResponse(200, "successfully got all chat", tuple(data))
 
     def add(self, user_id: int, frnd_id: int) -> ChatResponse:
