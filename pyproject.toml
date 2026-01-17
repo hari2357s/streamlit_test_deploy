@@ -18,6 +18,9 @@ description = "A simple chat app to explore streamlit and software engineering b
 dependencies = ["streamlit"]
 requires-python = ">=3.10"
 
+[project.scripts]
+myapp = "myapp.app:main"
+
 [tool.ruff.lint]
 select = [ "UP", "E", "F", "B", "SIM", "I", "PERF", "PL"]
 ignore = ["E501", "PLR0913", "F401"]
