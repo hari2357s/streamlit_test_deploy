@@ -12,11 +12,11 @@ import sys
 #     sys.path.insert(0, SRC_PATH)
 
 import streamlit as st
+st.write("sys.path[0] =", sys.path[0], sys.path)
 from myapp.common.container import Container
 from myapp.common.database.sqlite_db import SqliteDatabase
 from myapp.common.state_manager import StateManager
 
-st.write("sys.path[0] =", sys.path[0])
 
 def main():
     """
