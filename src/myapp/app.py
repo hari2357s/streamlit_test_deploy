@@ -1,6 +1,16 @@
 """
 Docstring for myapp.App
 """
+
+import os
+import sys
+
+CURRENT_FILE = os.path.abspath(__file__)
+SRC_PATH = os.path.dirname(os.path.dirname(CURRENT_FILE))
+
+if SRC_PATH not in sys.path:
+    sys.path.insert(0, SRC_PATH)
+
 import streamlit as st
 from myapp.common.container import Container
 from myapp.common.database.sqlite_db import SqliteDatabase
