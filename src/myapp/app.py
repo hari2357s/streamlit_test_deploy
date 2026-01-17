@@ -3,7 +3,7 @@ Docstring for myapp.App
 """
 
 # import os
-# import sys
+import sys
 
 # CURRENT_FILE = os.path.abspath(__file__)
 # SRC_PATH = os.path.dirname(os.path.dirname(CURRENT_FILE))
@@ -16,6 +16,7 @@ from myapp.common.container import Container
 from myapp.common.database.sqlite_db import SqliteDatabase
 from myapp.common.state_manager import StateManager
 
+st.write("sys.path[0] =", sys.path[0])
 
 def main():
     """
