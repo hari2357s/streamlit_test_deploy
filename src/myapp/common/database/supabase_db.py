@@ -2,18 +2,19 @@ import contextlib
 from collections.abc import Iterator
 
 import supabase
+import os
 from streamlit import secrets
 from postgrest import exceptions
 from .database import IDatabase
+from dotenv import load_dotenv
 
-
+load_dotenv()
 class SupaBaseDatabase(IDatabase):
     """
     Docstring for Sqlite_Database
     """
-
-    SUPABASE_URL = secrets["SUPABASE_URL"]
-    SUPABASE_KEY = secrets["SUPABASE_KEY"]
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
     def __init__(self, db_path="chat_app.db"):
         self._db_path = db_path
