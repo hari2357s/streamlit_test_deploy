@@ -55,7 +55,7 @@ class NewAccountPage:
                         st.balloons()
                         self.redirect()
                     elif res.status != HTTP.INTERNAL_SERVER_ERROR:
-                        toast_warning(res.msg)
+                        toast_warning("Username already exists!")
                     else:
                         toast_warning("Something went wrong!")
 

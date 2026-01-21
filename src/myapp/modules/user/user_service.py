@@ -8,7 +8,7 @@ from myapp.common.constants import (
     MIN_USERNAME_LENGTH,
 )
 from myapp.modules.user import IUserRepo, UserResponse
-
+from postgrest import exceptions
 
 class UserServices:
     """
@@ -32,13 +32,18 @@ class UserServices:
         """
         if uname == "" or upass == "":
             return UserResponse(
-                HTTP.INTERNAL_SERVER_ERROR, "Fill all the mandatory fields!", []
+                HTTP.BAD_REQUEST, "Fill all the mandatory fields!", []
             )
 
         if len(uname) < MIN_USERNAME_LENGTH or len(upass) < MIN_PASSWORD_LENGTH:
             return UserResponse(HTTP.FILE_NOT_FOUND, "User not found!", [])
 
-        user = self.__user_repo.get(uname, upass)
+        try:
+            user = self.__user_repo.get(uname, upass)
+        except ValueError as exc:
+            return UserResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
+            return UserResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
 
         if user is None:
             return UserResponse(HTTP.FILE_NOT_FOUND, "User not found", [])
@@ -73,6 +78,8 @@ class UserServices:
             self.__user_repo.add(uname, upass)
         except ValueError as exc:
             return UserResponse(HTTP.BAD_REQUEST, str(exc.args[0]), [])
+        except exceptions.APIError as exc:
+            return UserResponse(HTTP.BAD_REQUEST, str(exc.args[0]), [])
         return UserResponse(HTTP.OK, "Account created successfully", [])
 
     def delete_account(self, user_id: int) -> UserResponse:
@@ -83,5 +90,10 @@ class UserServices:
         :param user_id: Description
         :type uuser_id: int
         """
-        self.__user_repo.delete(user_id)
+        try:
+            self.__user_repo.delete(user_id)
+        except ValueError as exc:
+            return UserResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
+            return UserResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
         return UserResponse(HTTP.OK, "Account deleted Succesfully", [])

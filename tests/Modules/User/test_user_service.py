@@ -5,7 +5,7 @@ Docstring for myapp.Test.Modules.User.test_user_service
 import pytest
 from myapp.modules.user.user_repo import UserResponse
 from myapp.modules.user.user_service import UserServices
-from myapp.modules.user.user_repository import UserRepository
+from myapp.modules.user.user_repository_supabase import UserRepositorySupaBase
 from myapp.common.database.sqlite_db import SqliteDatabase
 
 
@@ -35,7 +35,7 @@ from myapp.common.database.sqlite_db import SqliteDatabase
 
 
 def test_login_success_with_mock(mocker):
-    mocker.Mock(spec= UserRepository) 
+    mocker.Mock(spec= UserRepositorySupaBase) 
     # user_service.create_account("validuser", "validpass", "validpass").content
 
     # resp = user_service.login("validuser", "validpass")

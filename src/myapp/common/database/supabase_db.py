@@ -3,7 +3,7 @@ from collections.abc import Iterator
 
 import supabase
 from streamlit import secrets
-
+from postgrest import exceptions
 from .database import IDatabase
 
 
@@ -28,5 +28,5 @@ class SupaBaseDatabase(IDatabase):
     def transaction(self) -> Iterator[supabase.Client]:
         try:
             yield self.cursor()
-        except Exception:
+        except exceptions.APIError:
             raise

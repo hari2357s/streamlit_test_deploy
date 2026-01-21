@@ -3,6 +3,7 @@
 *.pyc
 *.*_cache/
 chatvenv/
+.streamlit/
 *.db
 __pycache__/
 dist/

@@ -1,6 +1,7 @@
 """
 Docstring for myapp.Modules.chat.chat_service
 """
+from postgrest import exceptions
 
 from myapp.common.constants import HTTP
 
@@ -27,7 +28,9 @@ class ChatServices:
         """
         try:
             data = self.__chat_repo.get_all(user_id)
-        except Exception as exc:
+        except ValueError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
             return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
         return ChatResponse(HTTP.OK, "successfully got all chat", tuple(data))
 
@@ -43,7 +46,13 @@ class ChatServices:
         :return: Description
         :rtype: ChatResponse
         """
-        self.__chat_repo.add(user_id, frnd_id)
+        try:
+            self.__chat_repo.add(user_id, frnd_id)
+        except ValueError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+            
         return ChatResponse(HTTP.OK, "successfully added", [])
 
     def get_not_in_chat(self, user_id: int):
@@ -54,7 +63,12 @@ class ChatServices:
         :param user_id: Description
         :type user_id: int
         """
-        data = self.__chat_repo.get_not_in_chat(user_id)
+        try:
+            data = self.__chat_repo.get_not_in_chat(user_id)
+        except ValueError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
         return ChatResponse(HTTP.OK, "successfully got not in chat", data)
 
     def update_block(
@@ -74,5 +88,10 @@ class ChatServices:
         :rtype: ChatResponse
         """
         blocked = 1 if is_blocked else 0
-        self.__chat_repo.update(user_id, chat_id, blocked)
+        try:
+            self.__chat_repo.update(user_id, chat_id, blocked)
+        except ValueError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        except exceptions.APIError as exc:
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
         return ChatResponse(HTTP.OK, "successfully updated block", [])

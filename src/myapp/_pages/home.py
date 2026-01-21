@@ -29,10 +29,8 @@ def utc_to_ist(utc_time):
     """
     dt = datetime.fromisoformat(utc_time)
 
-    # Convert UTC → IST (+5:30)
     ist = dt.replace(tzinfo=timezone.utc) + timedelta(hours=5, minutes=30)
 
-    # Return in old SQLite format
     return ist.strftime("%Y-%m-%d %H:%M:%S")
 
 
