@@ -9,4 +9,3 @@ class IRepository(ABC):
     """
     Docstring for IRepository
     """
-

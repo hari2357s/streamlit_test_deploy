@@ -2,8 +2,8 @@ from .constants import (
     HTTP,
     MIN_PASSWORD_LENGTH,
     MIN_USERNAME_LENGTH,
+    ChatType,
     GroupRole,
-    ChatType
 )
 from .container import Container as Container
 from .database import IDatabase, SqliteDatabase

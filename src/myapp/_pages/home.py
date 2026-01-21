@@ -3,7 +3,7 @@ Docstring for myapp.Pages.home
 """
 
 import time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytz
 import streamlit as st
@@ -12,6 +12,7 @@ from myapp.common.constants import HTTP, ChatType
 from myapp.common.state_manager import CurrentChat
 from myapp.common.state_manager import StateManager as sm
 from myapp.common.ui_components import my_text, toast_success, toast_warning
+
 
 def get_time():
     """
@@ -67,7 +68,9 @@ class Home:
             if st.button("Add", type="primary"):
                 for i in selected_users:
                     # st.write(self.user.userID, users_dict[i])
-                    res = sm.get_container().chat_service.add(self.user.userID, users_dict[i])
+                    res = sm.get_container().chat_service.add(
+                        self.user.userID, users_dict[i]
+                    )
                     if res.status != HTTP.OK:
                         toast_warning("Something went wrong!")
                         break
@@ -89,7 +92,9 @@ class Home:
                 res = sm.get_container().chat_service.update_block(
                     self.user.userID, chat_id, is_blocked=True
                 )
-                toast_success("Blocked") if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                toast_success("Blocked") if res.status == HTTP.OK else toast_warning(
+                    "Something went wrong!"
+                )
                 # if res.status == HTTP.OK:
                 #     toast_success("Blocked!")
                 time.sleep(1)
@@ -111,7 +116,9 @@ class Home:
                     self.user.userID, chat_id, is_blocked=False
                 )
                 # Friends_Services().unblock_user(friend_uid)
-                toast_success("Un-Blocked!") if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                toast_success(
+                    "Un-Blocked!"
+                ) if res.status == HTTP.OK else toast_warning("Something went wrong!")
                 time.sleep(1)
                 st.rerun()
 
@@ -128,7 +135,9 @@ class Home:
                     self.user.userID,
                 )
                 # Friends_Services().unblock_user(friend_uid)
-                toast_success("Successfully Deleted account!") if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                toast_success(
+                    "Successfully Deleted account!"
+                ) if res.status == HTTP.OK else toast_warning("Something went wrong!")
                 time.sleep(1)
                 self.logout()
 
@@ -161,9 +170,9 @@ class Home:
         grp_name = st.text_input("Group Name").strip()
         res = sm.get_container().chat_service.get_all(self.user.userID)
         if res.status != HTTP.OK:
-             toast_warning("Something went wrong!")
-             time.sleep(2)
-             return
+            toast_warning("Something went wrong!")
+            time.sleep(2)
+            return
         users = res.content
         users_dict = {user.userName: user.userID for user in users}
         grp_members = st.multiselect("Members", users_dict.keys())
@@ -174,7 +183,9 @@ class Home:
                 if grp_name == "":
                     toast_warning("Fill the Group Name!")
                     return
-                members_id = tuple(int(users_dict[grpMember]) for grpMember in grp_members)
+                members_id = tuple(
+                    int(users_dict[grpMember]) for grpMember in grp_members
+                )
                 sm.get_container().group_service.create_group(
                     self.user.userID, grp_name, members_id
                 )
@@ -302,7 +313,9 @@ class Home:
                         type="primary",
                         icon=":material/group:",
                     ):
-                        sm.set_current_chat(CurrentChat(grp.id, grp.name, ChatType.GROUP))
+                        sm.set_current_chat(
+                            CurrentChat(grp.id, grp.name, ChatType.GROUP)
+                        )
                     with st.popover("", type="tertiary", width=10):
                         if st.button(
                             "Add Members",
@@ -351,7 +364,11 @@ class Home:
                     with st.popover("", type="tertiary"):
                         if st.button("Delete Msg", key=f"{user_id}-{chat_time}"):
                             res = sm.get_container().msg_service.delete_msg(msg_id)
-                            toast_success(res.msg) if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                            toast_success(
+                                res.msg
+                            ) if res.status == HTTP.OK else toast_warning(
+                                "Something went wrong!"
+                            )
                             time.sleep(2)
                             st.rerun()
 

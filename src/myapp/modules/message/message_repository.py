@@ -4,8 +4,8 @@ Docstring for myapp.Modules.message.message_repository
 
 from collections.abc import Iterator
 
-from myapp.common.database import IDatabase
 from myapp.common.constants import ChatType
+from myapp.common.database import IDatabase
 
 from .message_repo import IMessageRepo, Message
 
@@ -49,16 +49,15 @@ class MessageRepository(IMessageRepo):
                 """INSERT INTO MESSAGE (MESSAGE, USERID, CHATID, GROUPID, TYPE) VALUES(?,?,?,?,?)""",
                 (msg, user_id, chat_id, grp_id, msg_type.value),
             )
-            
-    def update_msg(
-        self,
-        updated_msg: str,
-        msg_id: int
-    ):
+
+    def update_msg(self, updated_msg: str, msg_id: int):
         with self.db.transaction() as cur:
             cur.execute(
-                '''UPDATE MESSAGE SET MESSAGE = ? WHERE ID = ?''',
-                (updated_msg, msg_id,)
+                """UPDATE MESSAGE SET MESSAGE = ? WHERE ID = ?""",
+                (
+                    updated_msg,
+                    msg_id,
+                ),
             )
 
     def get_all_msg(

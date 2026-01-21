@@ -12,6 +12,7 @@ if SRC_PATH not in sys.path:
     sys.path.insert(0, SRC_PATH)
 
 import streamlit as st
+
 from myapp.common.container import Container
 from myapp.common.database.sqlite_db import SqliteDatabase
 from myapp.common.database.supabase_db import SupaBaseDatabase
@@ -21,7 +22,7 @@ from myapp.common.state_manager import StateManager
 def main():
     """
     Docstring for main
-    """ 
+    """
 
     if "Container" not in st.session_state:
         # db: SqliteDatabase= SqliteDatabase()

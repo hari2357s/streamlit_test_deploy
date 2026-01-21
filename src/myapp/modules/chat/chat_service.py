@@ -2,8 +2,10 @@
 Docstring for myapp.Modules.chat.chat_service
 """
 
-from .chat_repo import ChatResponse, IChatRepo
 from myapp.common.constants import HTTP
+
+from .chat_repo import ChatResponse, IChatRepo
+
 
 class ChatServices:
     """

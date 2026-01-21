@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 from typing import Any
 
+
 class IDatabase(ABC):
     """
     Docstring for IDatabase

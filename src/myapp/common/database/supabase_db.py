@@ -1,22 +1,25 @@
-
 import contextlib
-import supabase
 from collections.abc import Iterator
 
-from .database import IDatabase
+import supabase
 from streamlit import secrets
+
+from .database import IDatabase
+
 
 class SupaBaseDatabase(IDatabase):
     """
     Docstring for Sqlite_Database
-    """    
-    
+    """
+
     SUPABASE_URL = secrets["SUPABASE_URL"]
     SUPABASE_KEY = secrets["SUPABASE_KEY"]
 
     def __init__(self, db_path="chat_app.db"):
         self._db_path = db_path
-        self._supabase = supabase.create_client(SupaBaseDatabase.SUPABASE_URL, SupaBaseDatabase.SUPABASE_KEY)
+        self._supabase = supabase.create_client(
+            SupaBaseDatabase.SUPABASE_URL, SupaBaseDatabase.SUPABASE_KEY
+        )
 
     def cursor(self):
         return self._supabase
@@ -27,5 +30,3 @@ class SupaBaseDatabase(IDatabase):
             yield self.cursor()
         except Exception:
             raise
-
-

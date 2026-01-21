@@ -2,8 +2,10 @@
 Docstring for myapp.Modules.group.group_service
 """
 
-from .group_repo import GroupResponse, IGroupRepo
 from myapp.common.constants import HTTP
+
+from .group_repo import GroupResponse, IGroupRepo
+
 
 class GroupServices:
     """
@@ -12,11 +14,13 @@ class GroupServices:
 
     def __init__(self, grp_repo: IGroupRepo) -> None:
         self.__grp_repo = grp_repo
-        
-    def add_members(self, user_id: int, group_id: int, member_ids: tuple[int,...    ], role: str):
-        '''
+
+    def add_members(
+        self, user_id: int, group_id: int, member_ids: tuple[int, ...], role: str
+    ):
+        """
         Docstring for add_members
-        
+
         :param self: Description
         :param user_id: Description
         :type user_id: int
@@ -24,16 +28,16 @@ class GroupServices:
         :type group_id: int
         :param member_ids: Description
         :type member_ids: tuple[int]
-        '''
+        """
         try:
-            #need to validate whether the user_id is ADMIN or not
+            # need to validate whether the user_id is ADMIN or not
             for member_id in member_ids:
                 self.__grp_repo.add_member(member_id, group_id, role)
         except Exception as exc:
             return GroupResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
         return GroupResponse(HTTP.OK, "Successfully group created", [])
 
-    def create_group(self, user_id: int, group_name: str, member_ids: tuple[int,...]):
+    def create_group(self, user_id: int, group_name: str, member_ids: tuple[int, ...]):
         """
         Docstring for createGroup
 
