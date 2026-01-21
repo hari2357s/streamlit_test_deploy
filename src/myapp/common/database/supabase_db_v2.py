@@ -5,6 +5,7 @@ Docstring for myapp.Common.Database.sqlite_db
 import contextlib
 import os
 import psycopg2
+from streamlit import secrets
 from dotenv import load_dotenv
 from collections.abc import Iterator
 
@@ -18,11 +19,11 @@ class SupaBaseDatabase_V2(IDatabase):
     """
 
     def __init__(self):
-        USER = os.getenv("user")
-        PASSWORD = os.getenv("password")
-        HOST = os.getenv("host")
-        PORT = os.getenv("port")
-        DBNAME = os.getenv("dbname")
+        USER = secrets["user"]
+        PASSWORD = secrets["password"]
+        HOST = secrets["host"]
+        PORT = secrets["port"]
+        DBNAME = secrets["dbname"]
         try:
             self._conn = psycopg2.connect(
                 user=USER,
