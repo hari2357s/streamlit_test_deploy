@@ -7,7 +7,7 @@ from typing import NamedTuple
 import streamlit as st
 
 from myapp.modules.user import User
-
+from .constants import ChatType
 from .container import Container
 
 
@@ -18,7 +18,7 @@ class CurrentChat(NamedTuple):
 
     chatID: int
     chatName: str
-    type: str
+    type: ChatType
 
 
 class StateManager:

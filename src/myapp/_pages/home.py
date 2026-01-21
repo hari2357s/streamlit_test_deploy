@@ -3,16 +3,15 @@ Docstring for myapp.Pages.home
 """
 
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 import pytz
 import streamlit as st
 
-from myapp.common.constants import HTTP_OK
+from myapp.common.constants import HTTP, ChatType
 from myapp.common.state_manager import CurrentChat
 from myapp.common.state_manager import StateManager as sm
 from myapp.common.ui_components import my_text, toast_success, toast_warning
-
 
 def get_time():
     """
@@ -27,12 +26,13 @@ def utc_to_ist(utc_time):
 
     :param utc_time: Description
     """
-    utc_format = "%Y-%m-%d %H:%M:%S"
-    utc_naive_dt = datetime.strptime(utc_time, utc_format)
-    utc_aware_dt = pytz.utc.localize(utc_naive_dt)
-    ist_timezone = pytz.timezone("Asia/Kolkata")
-    ist_time = str(utc_aware_dt.astimezone(ist_timezone))
-    return ist_time[: len(ist_time) - 6]
+    dt = datetime.fromisoformat(utc_time)
+
+    # Convert UTC → IST (+5:30)
+    ist = dt.replace(tzinfo=timezone.utc) + timedelta(hours=5, minutes=30)
+
+    # Return in old SQLite format
+    return ist.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class Home:
@@ -67,7 +67,10 @@ class Home:
             if st.button("Add", type="primary"):
                 for i in selected_users:
                     # st.write(self.user.userID, users_dict[i])
-                    sm.get_container().chat_service.add(self.user.userID, users_dict[i])
+                    res = sm.get_container().chat_service.add(self.user.userID, users_dict[i])
+                    if res.status != HTTP.OK:
+                        toast_warning("Something went wrong!")
+                        break
                 toast_success(f"Successfully Added users {selected_users}")
                 st.rerun()
 
@@ -83,10 +86,12 @@ class Home:
             if st.button("No"):
                 st.rerun()
             if st.button("Yes", type="primary"):
-                sm.get_container().chat_service.update_block(
+                res = sm.get_container().chat_service.update_block(
                     self.user.userID, chat_id, is_blocked=True
                 )
-                toast_success("Blocked!")
+                toast_success("Blocked") if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                # if res.status == HTTP.OK:
+                #     toast_success("Blocked!")
                 time.sleep(1)
                 st.rerun()
 
@@ -102,11 +107,11 @@ class Home:
             if st.button("No"):
                 st.rerun()
             if st.button("Yes", type="primary"):
-                sm.get_container().chat_service.update_block(
+                res = sm.get_container().chat_service.update_block(
                     self.user.userID, chat_id, is_blocked=False
                 )
                 # Friends_Services().unblock_user(friend_uid)
-                toast_success("Un-Blocked!")
+                toast_success("Un-Blocked!") if res.status == HTTP.OK else toast_warning("Something went wrong!")
                 time.sleep(1)
                 st.rerun()
 
@@ -119,11 +124,11 @@ class Home:
             if st.button("No"):
                 st.rerun()
             if st.button("Yes", type="primary"):
-                sm.get_container().user_service.delete_account(
+                res = sm.get_container().user_service.delete_account(
                     self.user.userID,
                 )
                 # Friends_Services().unblock_user(friend_uid)
-                toast_success("Successfully Deleted account!")
+                toast_success("Successfully Deleted account!") if res.status == HTTP.OK else toast_warning("Something went wrong!")
                 time.sleep(1)
                 self.logout()
 
@@ -155,11 +160,11 @@ class Home:
         """
         grp_name = st.text_input("Group Name").strip()
         res = sm.get_container().chat_service.get_all(self.user.userID)
-        users = [] if res.status != HTTP_OK else res.content
-        # if res.status != HTTP_OK:
-        #     users = []
-        # else:
-        #     users = res.content
+        if res.status != HTTP.OK:
+             toast_warning("Something went wrong!")
+             time.sleep(2)
+             return
+        users = res.content
         users_dict = {user.userName: user.userID for user in users}
         grp_members = st.multiselect("Members", users_dict.keys())
         with st.container(horizontal=True):
@@ -169,15 +174,13 @@ class Home:
                 if grp_name == "":
                     toast_warning("Fill the Group Name!")
                     return
-                members_id = [users_dict[grpMember] for grpMember in grp_members]
+                members_id = tuple(int(users_dict[grpMember]) for grpMember in grp_members)
                 sm.get_container().group_service.create_group(
                     self.user.userID, grp_name, members_id
                 )
                 toast_success("Group Created Successfully!")
                 time.sleep(2)
                 st.rerun()
-                # st.write(grp_name)
-                # st.write(grp_members)
 
     def contact_tile(self, chat_id: int, user_name: str):
         """
@@ -193,11 +196,11 @@ class Home:
             if st.button(
                 user_name.capitalize(),
                 width="stretch",
-                key=f"{chat_id}1",
+                key=f"{chat_id}_{user_name}",
                 use_container_width=True,
                 icon=":material/person:",
             ):
-                sm.set_current_chat(CurrentChat(chat_id, user_name, "DM"))
+                sm.set_current_chat(CurrentChat(chat_id, user_name, ChatType.DM))
 
             with st.popover("", type="tertiary", width=10):
                 if st.button("Remove", key=f"{chat_id}2", width="stretch"):
@@ -230,18 +233,22 @@ class Home:
         )
         with contacts:
             res = sm.get_container().chat_service.get_all(self.user.userID)
-            if res.status == HTTP_OK:
-                users = res.content
-                for user in users:
-                    if user.blocked != 1:
-                        self.contact_tile(user.chatID, user.userName)
-                    else:
-                        with blocked:
-                            if st.button(
-                                user.userName, width="stretch", icon=":material/block:"
-                            ):
-                                # pass
-                                self.confirm_unblock(user.chatID)
+            # st.write(res)
+            if res.status != HTTP.OK:
+                toast_warning("Something went wrong!")
+                time.sleep(2)
+                return
+            users = res.content
+            for user in users:
+                if user.blocked != 1:
+                    self.contact_tile(user.chatID, user.userName)
+                else:
+                    with blocked:
+                        if st.button(
+                            user.userName, width="stretch", icon=":material/block:"
+                        ):
+                            # pass
+                            self.confirm_unblock(user.chatID)
             # if st.button('Broadcast', width='stretch'):
             #     self.broadcast()
 
@@ -280,9 +287,12 @@ class Home:
 
         with groups:
             res = sm.get_container().group_service.get_all_groups(self.user.userID)
-            if res.status != HTTP_OK:
+            if res.status != HTTP.OK:
+                toast_warning("Something went wrong!")
+                time.sleep(2)
                 return
             grps = res.content
+            # st.write(res, grps)
             for grp in grps:
                 with st.container(horizontal=True):
                     if st.button(
@@ -292,7 +302,7 @@ class Home:
                         type="primary",
                         icon=":material/group:",
                     ):
-                        sm.set_current_chat(CurrentChat(grp.id, grp.name, "GROUP"))
+                        sm.set_current_chat(CurrentChat(grp.id, grp.name, ChatType.GROUP))
                     with st.popover("", type="tertiary", width=10):
                         if st.button(
                             "Add Members",
@@ -340,7 +350,9 @@ class Home:
                     )
                     with st.popover("", type="tertiary"):
                         if st.button("Delete Msg", key=f"{user_id}-{chat_time}"):
-                            sm.get_container().msg_service.delete_msg(msg_id)
+                            res = sm.get_container().msg_service.delete_msg(msg_id)
+                            toast_success(res.msg) if res.status == HTTP.OK else toast_warning("Something went wrong!")
+                            time.sleep(2)
                             st.rerun()
 
                 else:
@@ -384,7 +396,7 @@ class Home:
                 self.user.userID, current_chat.chatID, current_chat.type
             )
             # st.write(msgs)
-            if res.status == HTTP_OK:
+            if res.status == HTTP.OK:
                 msgs = res.content
                 for msg in msgs:
                     # st.write(msg)
@@ -411,12 +423,14 @@ class Home:
                 )
                 current_chat = sm.get_current_chat()
                 if current_chat is not None:
-                    sm.get_container().msg_service.add_message(
+                    res = sm.get_container().msg_service.add_message(
                         new_msg,
                         self.user.userID,
                         current_chat.chatID,
                         current_chat.type,
                     )
+                    if res.status != HTTP.OK:
+                        toast_warning("Something went wrong!")
 
     def __init__(self):
         user = sm.get_user()

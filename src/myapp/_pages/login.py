@@ -6,10 +6,7 @@ import time
 
 import streamlit as st
 
-from myapp.common.constants import (
-    HTTP_INTERNAL_SERVER_ERROR,
-    HTTP_OK,
-)
+from myapp.common.constants import HTTP
 from myapp.common.state_manager import StateManager as sm
 from myapp.common.ui_components import my_text, toast_success, toast_warning
 
@@ -28,11 +25,11 @@ class Login:
         :param upass: Description
         """
         res = sm.get_container().user_service.login(uname, upass)
-        if res.status == HTTP_OK:
+        if res.status == HTTP.OK:
             sm.set_authenticated(True)
             sm.set_user(res.content[0])
         else:
-            if res.status != HTTP_INTERNAL_SERVER_ERROR:
+            if res.status != HTTP.INTERNAL_SERVER_ERROR:
                 toast_warning(res.msg)
             else:
                 toast_warning("Something is not right!")

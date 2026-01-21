@@ -3,10 +3,7 @@ Docstring for myapp.Modules.user.user_service
 """
 
 from myapp.common.constants import (
-    HTTP_BAD_REQUEST,
-    HTTP_FILE_NOT_FOUND,
-    HTTP_INTERNAL_SERVER_ERROR,
-    HTTP_OK,
+    HTTP,
     MIN_PASSWORD_LENGTH,
     MIN_USERNAME_LENGTH,
 )
@@ -35,17 +32,17 @@ class UserServices:
         """
         if uname == "" or upass == "":
             return UserResponse(
-                HTTP_INTERNAL_SERVER_ERROR, "Fill all the mandatory fields!", []
+                HTTP.INTERNAL_SERVER_ERROR, "Fill all the mandatory fields!", []
             )
 
         if len(uname) < MIN_USERNAME_LENGTH or len(upass) < MIN_PASSWORD_LENGTH:
-            return UserResponse(HTTP_FILE_NOT_FOUND, "User not found!", [])
+            return UserResponse(HTTP.FILE_NOT_FOUND, "User not found!", [])
 
         user = self.__user_repo.get(uname, upass)
 
         if user is None:
-            return UserResponse(HTTP_FILE_NOT_FOUND, "User not found", [])
-        return UserResponse(HTTP_OK, "Successfully logged in", [user])
+            return UserResponse(HTTP.FILE_NOT_FOUND, "User not found", [])
+        return UserResponse(HTTP.OK, "Successfully logged in", [user])
 
     def create_account(self, uname: str, ucpass: str, upass: str) -> UserResponse:
         """
@@ -63,20 +60,20 @@ class UserServices:
         """
         if len(uname) < MIN_USERNAME_LENGTH:
             return UserResponse(
-                HTTP_BAD_REQUEST, "Username should be minimum of 4 characters long!", []
+                HTTP.BAD_REQUEST, "Username should be minimum of 4 characters long!", []
             )
         if len(upass) < MIN_PASSWORD_LENGTH or len(ucpass) < MIN_PASSWORD_LENGTH:
             return UserResponse(
-                HTTP_BAD_REQUEST, "Password should be minimum of 8 characters long!", []
+                HTTP.BAD_REQUEST, "Password should be minimum of 8 characters long!", []
             )
         if upass != ucpass:
-            return UserResponse(HTTP_BAD_REQUEST, "Passwords doesn't match!", [])
+            return UserResponse(HTTP.BAD_REQUEST, "Passwords doesn't match!", [])
 
         try:
             self.__user_repo.add(uname, upass)
         except ValueError as exc:
-            return UserResponse(HTTP_BAD_REQUEST, str(exc.args[0]), [])
-        return UserResponse(HTTP_OK, "Account created successfully", [])
+            return UserResponse(HTTP.BAD_REQUEST, str(exc.args[0]), [])
+        return UserResponse(HTTP.OK, "Account created successfully", [])
 
     def delete_account(self, user_id: int) -> UserResponse:
         """
@@ -87,4 +84,4 @@ class UserServices:
         :type uuser_id: int
         """
         self.__user_repo.delete(user_id)
-        return UserResponse(HTTP_OK, "Account deleted Succesfully", [])
+        return UserResponse(HTTP.OK, "Account deleted Succesfully", [])

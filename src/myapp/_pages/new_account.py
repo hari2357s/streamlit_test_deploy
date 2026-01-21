@@ -4,10 +4,7 @@ Docstring for myapp.Pages.new_account
 
 import streamlit as st
 
-from myapp.common.constants import (
-    HTTP_INTERNAL_SERVER_ERROR,
-    HTTP_OK,
-)
+from myapp.common.constants import HTTP
 from myapp.common.state_manager import StateManager as sm
 from myapp.common.ui_components import my_text, success, toast_warning
 
@@ -53,11 +50,11 @@ class NewAccountPage:
                     res = sm.get_container().user_service.create_account(
                         uname, upass, ucpass
                     )
-                    if res.status == HTTP_OK:
+                    if res.status == HTTP.OK:
                         success("Account created successfully")
                         st.balloons()
                         self.redirect()
-                    elif res.status != HTTP_INTERNAL_SERVER_ERROR:
+                    elif res.status != HTTP.INTERNAL_SERVER_ERROR:
                         toast_warning(res.msg)
                     else:
                         toast_warning("Something went wrong!")

@@ -10,6 +10,7 @@ from typing import NamedTuple
 
 from myapp.common.repository import IRepository
 from myapp.common.response import Response
+from myapp.common.constants import ChatType
 
 
 class Message(NamedTuple):
@@ -49,7 +50,7 @@ class IMessageRepo(IRepository):
         user_id: int,
         chat_id: int | None,
         grp_id: int | None,
-        msg_type: str,
+        msg_type: ChatType,
     ):
         """
         Docstring for add_msg

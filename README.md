@@ -44,13 +44,19 @@ This project aims to build a **simple yet functional chat system** using Streaml
 ## 📁 Project Structure  
 project/
 │
-├── app.py
 ├── requirements.txt
 ├── README.md
-├── modules/
-│ ├── chat/
-│ ├── user/
-│ └── database/
+├── pyproject.toml
+├── src
+| ├── myapp
+|   ├── app.py
+|   ├── common/
+│     └── database/
+|   ├── modules/
+│     ├── chat/
+│     ├── group/
+│     ├── user/
+│     └── message/
 
 ---
 

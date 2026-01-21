@@ -1,7 +1,7 @@
 import sqlite3
 import pytest
-from ....src.myapp.common.database.sqlite_db import SqliteDatabase
-from ....src.myapp.modules.chat.chat_repository import ChatRepository
+from src.myapp.common.database.sqlite_db import SqliteDatabase
+from src.myapp.modules.chat.chat_repository import ChatRepository
 
 @pytest.fixture
 def chat_repository():

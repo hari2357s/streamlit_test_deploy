@@ -29,15 +29,12 @@ class UserRepository(IUserRepo):
                                   )""")
 
     def add(self, uname: str, upass: str):
-        try:
-            with self.db.transaction() as cur:
-                cur.execute(
-                    """INSERT INTO USER(USERNAME, PASSWORD) 
-                                        VALUES(?,?)""",
-                    (uname, self.sha512(upass)),
-                )
-        except sqlite3.IntegrityError as exc:
-            raise ValueError("Username already exists") from exc
+        with self.db.transaction() as cur:
+            cur.execute(
+                """INSERT INTO USER(USERNAME, PASSWORD) 
+                                    VALUES(?,?)""",
+                (uname, self.sha512(upass)),
+            )
 
     def get(self, uname: str, upass: str) -> User | None:
         with self.db.transaction() as cur:

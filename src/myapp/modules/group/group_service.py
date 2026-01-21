@@ -3,7 +3,7 @@ Docstring for myapp.Modules.group.group_service
 """
 
 from .group_repo import GroupResponse, IGroupRepo
-
+from myapp.common.constants import HTTP
 
 class GroupServices:
     """
@@ -13,7 +13,7 @@ class GroupServices:
     def __init__(self, grp_repo: IGroupRepo) -> None:
         self.__grp_repo = grp_repo
         
-    def add_members(self, user_id: int, group_id: int, member_ids: tuple[int], role: str):
+    def add_members(self, user_id: int, group_id: int, member_ids: tuple[int,...    ], role: str):
         '''
         Docstring for add_members
         
@@ -29,11 +29,11 @@ class GroupServices:
             #need to validate whether the user_id is ADMIN or not
             for member_id in member_ids:
                 self.__grp_repo.add_member(member_id, group_id, role)
-        except Exception:
-            raise
-        return GroupResponse(200, "Successfully group created", [])
+        except Exception as exc:
+            return GroupResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return GroupResponse(HTTP.OK, "Successfully group created", [])
 
-    def create_group(self, user_id: int, group_name: str, member_ids: tuple[int]):
+    def create_group(self, user_id: int, group_name: str, member_ids: tuple[int,...]):
         """
         Docstring for createGroup
 
@@ -50,9 +50,9 @@ class GroupServices:
             self.add_members(user_id, group_id, member_ids, "MEMBER")
             # for member_id in member_ids:
             #     self.__grp_repo.add_member(member_id, group_id, "MEMBER")
-        except Exception:
-            raise
-        return GroupResponse(200, "Successfully group created", [])
+        except Exception as exc:
+            return GroupResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return GroupResponse(HTTP.OK, "Successfully group created", [])
 
     def get_all_groups(self, user_id: int) -> GroupResponse:
         """
@@ -65,7 +65,7 @@ class GroupServices:
         :rtype: GroupResponse
         """
         data = self.__grp_repo.get_all(user_id)
-        return GroupResponse(200, "Successfully got all groups", data)
+        return GroupResponse(HTTP.OK, "Successfully got all groups", data)
 
     def delete_group(self, group_id: int):
         """
@@ -78,5 +78,5 @@ class GroupServices:
         try:
             self.__grp_repo.delete(group_id)
         except ValueError as exc:
-            return GroupResponse(500, str(exc), [])
-        return GroupResponse(200, "Successfully deleted group", [])
+            return GroupResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return GroupResponse(HTTP.OK, "Successfully deleted group", [])

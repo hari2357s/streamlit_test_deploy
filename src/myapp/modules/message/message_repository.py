@@ -5,6 +5,7 @@ Docstring for myapp.Modules.message.message_repository
 from collections.abc import Iterator
 
 from myapp.common.database import IDatabase
+from myapp.common.constants import ChatType
 
 from .message_repo import IMessageRepo, Message
 
@@ -41,12 +42,12 @@ class MessageRepository(IMessageRepo):
         user_id: int,
         chat_id: int | None,
         grp_id: int | None,
-        msg_type: str,
+        msg_type: ChatType,
     ):
         with self.db.transaction() as cur:
             cur.execute(
                 """INSERT INTO MESSAGE (MESSAGE, USERID, CHATID, GROUPID, TYPE) VALUES(?,?,?,?,?)""",
-                (msg, user_id, chat_id, grp_id, msg_type),
+                (msg, user_id, chat_id, grp_id, msg_type.value),
             )
             
     def update_msg(

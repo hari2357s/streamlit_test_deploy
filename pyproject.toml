@@ -26,8 +26,7 @@ select = [ "UP", "E", "F", "B", "SIM", "I", "PERF", "PL"]
 ignore = ["E501", "PLR0913", "F401"]
 
 [tool.ruff]
-exclude = ["test"]
+exclude = ["tests"]
 
-[tool.poetry]
-package-mode = false
-
+[tool.pytest.ini_options]
+pythonpath = ["src"]

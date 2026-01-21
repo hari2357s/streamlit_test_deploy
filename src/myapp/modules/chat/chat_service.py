@@ -3,7 +3,7 @@ Docstring for myapp.Modules.chat.chat_service
 """
 
 from .chat_repo import ChatResponse, IChatRepo
-
+from myapp.common.constants import HTTP
 
 class ChatServices:
     """
@@ -26,8 +26,8 @@ class ChatServices:
         try:
             data = self.__chat_repo.get_all(user_id)
         except Exception as exc:
-            return ChatResponse(500, "internal server error", exc.args)
-        return ChatResponse(200, "successfully got all chat", tuple(data))
+            return ChatResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return ChatResponse(HTTP.OK, "successfully got all chat", tuple(data))
 
     def add(self, user_id: int, frnd_id: int) -> ChatResponse:
         """
@@ -42,7 +42,7 @@ class ChatServices:
         :rtype: ChatResponse
         """
         self.__chat_repo.add(user_id, frnd_id)
-        return ChatResponse(200, "successfully added", [])
+        return ChatResponse(HTTP.OK, "successfully added", [])
 
     def get_not_in_chat(self, user_id: int):
         """
@@ -53,7 +53,7 @@ class ChatServices:
         :type user_id: int
         """
         data = self.__chat_repo.get_not_in_chat(user_id)
-        return ChatResponse(200, "successfully got not in chat", data)
+        return ChatResponse(HTTP.OK, "successfully got not in chat", data)
 
     def update_block(
         self, user_id: int, chat_id: int, is_blocked: bool
@@ -71,5 +71,6 @@ class ChatServices:
         :return: Description
         :rtype: ChatResponse
         """
-        self.__chat_repo.update(user_id, chat_id, 1 if is_blocked else 0)
-        return ChatResponse(200, "successfully updated block", [])
+        blocked = 1 if is_blocked else 0
+        self.__chat_repo.update(user_id, chat_id, blocked)
+        return ChatResponse(HTTP.OK, "successfully updated block", [])

@@ -5,7 +5,7 @@ It has all the services related to message
 """
 
 from .message_repo import IMessageRepo, MessageResponse
-
+from myapp.common.constants import HTTP, ChatType
 
 class MessageServices:
     """
@@ -16,7 +16,7 @@ class MessageServices:
         self.__msg_repo = msg_repo
 
     def add_message(
-        self, msg: str, user_id: int, chat_id: int, chat_type: str
+        self, msg: str, user_id: int, chat_id: int, chat_type: ChatType
     ) -> MessageResponse:
         """
         Docstring for add_message
@@ -33,15 +33,17 @@ class MessageServices:
         :return: Description
         :rtype: MessageResponse
         """
-        if chat_type == "DM":
+        if chat_type == ChatType.DM:
             self.__msg_repo.add_msg(msg, user_id, chat_id, None, chat_type)
-        elif chat_type == "GROUP":
+            return MessageResponse(HTTP.OK, "Successfully added DM message", [])
+        elif chat_type == ChatType.GROUP:
             self.__msg_repo.add_msg(msg, user_id, None, chat_id, chat_type)
+            return MessageResponse(HTTP.OK, "Successfully added Group message", [])
 
-        return MessageResponse(500, "invalid option", [])
+        return MessageResponse(HTTP.INTERNAL_SERVER_ERROR, "invalid option", [])
 
     def get_all_message(
-        self, uid: int, chat_id: int | None, chat_type: str
+        self, uid: int, chat_id: int | None, chat_type: ChatType
     ) -> MessageResponse:
         """
         Docstring for get_all_message
@@ -57,15 +59,15 @@ class MessageServices:
         :rtype: MessageResponse
         """
         result = None
-        if chat_type == "DM":
+        if chat_type == ChatType.DM:
             result = self.__msg_repo.get_all_msg(uid, chat_id, None)
-        elif chat_type == "GROUP":
+        elif chat_type == ChatType.GROUP:
             result = self.__msg_repo.get_all_msg(uid, None, chat_id)
 
         if result:
-            return MessageResponse(200, "Successfully got all msgs", result)
+            return MessageResponse(HTTP.OK, "Successfully got all msgs", result)
 
-        return MessageResponse(500, "invalid option", [])
+        return MessageResponse(HTTP.INTERNAL_SERVER_ERROR, "Invalid option", [])
 
     def delete_msg(self, msg_id: int) -> MessageResponse:
         """
@@ -80,8 +82,8 @@ class MessageServices:
         try:
             self.__msg_repo.delete_msg(msg_id)
         except Exception as exc:
-            return MessageResponse(500, str(exc.args), [])
-        return MessageResponse(200, "Message deleted successfully", [])
+            return MessageResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return MessageResponse(HTTP.OK, "Message deleted successfully", [])
     
     def update_msg(self, updated_msg: str, msg_id: int):
         '''
@@ -96,5 +98,5 @@ class MessageServices:
         try:
             self.__msg_repo.update_msg(updated_msg, msg_id)
         except Exception as exc:
-            return MessageResponse(500, str(exc.args), [])
-        return MessageResponse(200, "Message updated successfully", [])
+            return MessageResponse(HTTP.INTERNAL_SERVER_ERROR, str(exc.args), [])
+        return MessageResponse(HTTP.OK, "Message updated successfully", [])

@@ -4,8 +4,7 @@ Docstring for myapp.Common.Database.database
 
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
-from sqlite3 import Cursor
-
+from typing import Any
 
 class IDatabase(ABC):
     """
@@ -13,29 +12,13 @@ class IDatabase(ABC):
     """
 
     @abstractmethod
-    def cursor(self) -> Cursor:
+    def cursor(self) -> Any:
         """
         Docstring for cursor
 
         :param self: Description
         :return: Description
         :rtype: Cursor
-        """
-
-    @abstractmethod
-    def commit(self):
-        """
-        Docstring for commit
-
-        :param self: Description
-        """
-
-    @abstractmethod
-    def rollback(self):
-        """
-        Docstring for rollback
-
-        :param self: Description
         """
 
     @abstractmethod
