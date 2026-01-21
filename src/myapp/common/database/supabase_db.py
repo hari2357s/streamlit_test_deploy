@@ -10,8 +10,6 @@ class SupaBaseDatabase(IDatabase):
     """
     Docstring for Sqlite_Database
     """    
-    # SUPABASE_URL="https://uzklqxaqtfigzorkirqx.supabase.co"
-    # SUPABASE_KEY="sb_publishable_EI74d76J5E6rp93Blz3PFw_4QsgZQJR"
     
     SUPABASE_URL = secrets["SUPABASE_URL"]
     SUPABASE_KEY = secrets["SUPABASE_KEY"]
