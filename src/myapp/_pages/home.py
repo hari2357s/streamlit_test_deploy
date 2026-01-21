@@ -20,13 +20,12 @@ def get_time():
     """
     return time.strftime("%Y-%m-%d %H:%M:%S")
 
+def utc_to_ist(utc_time: str) -> str:
+    if "." in utc_time:
+        date, frac = utc_time.split(".")
+        frac = frac.ljust(6, "0")  
+        utc_time = f"{date}.{frac}"
 
-def utc_to_ist(utc_time):
-    """
-    Docstring for utc_to_ist
-
-    :param utc_time: Description
-    """
     dt = datetime.fromisoformat(utc_time)
 
     ist = dt.replace(tzinfo=timezone.utc) + timedelta(hours=5, minutes=30)
@@ -419,7 +418,7 @@ class Home:
                         msg.userName,
                         msg.userID,
                         msg.msg,
-                        utc_to_ist(msg.sentAt),
+                        utc_to_ist(str(msg.sentAt)),
                         msg.chat_id,
                         # seen=False if msg.seenAt is None else True,
                         seen=not msg.seenAt,

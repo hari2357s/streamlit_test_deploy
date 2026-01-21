@@ -9,3 +9,4 @@ __pycache__/
 dist/
 src/myapp.egg-info/
 build_test.py
+.env

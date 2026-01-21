@@ -18,6 +18,8 @@ class SupaBaseDatabase(IDatabase):
 
     def __init__(self, db_path="chat_app.db"):
         self._db_path = db_path
+        if SupaBaseDatabase.SUPABASE_KEY is None or SupaBaseDatabase.SUPABASE_URL is None:
+            raise ValueError
         self._supabase = supabase.create_client(
             SupaBaseDatabase.SUPABASE_URL, SupaBaseDatabase.SUPABASE_KEY
         )
