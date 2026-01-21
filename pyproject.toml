@@ -15,7 +15,7 @@ authors = [
   { name="Hari Karthick", email="hari.ksp@zohointern.com" },
 ]
 description = "A simple chat app to explore streamlit and software engineering basics"
-dependencies = ["streamlit", "supabase", "python-dotenv", "psycopg2"]
+dependencies = ["streamlit", "supabase", "python-dotenv", "psycopg2-binary"]
 requires-python = ">=3.10"
 
 [project.scripts]
