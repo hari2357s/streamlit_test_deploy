@@ -16,11 +16,11 @@ class UserRepository(IUserRepo):
 
     def __init__(self, db: IDatabase):
         self.db = db
-        self.create_table()
+        # self.create_table()
 
     def create_table(self):
         with self.db.transaction() as cur:
-            cur.execute("""CREATE TABLE IF NOT EXISTS USER(
+            cur.execute("""CREATE TABLE IF NOT EXISTS USERS(
                                   USERID INTEGER PRIMARY KEY AUTOINCREMENT,
                                   USERNAME TEXT NOT NULL UNIQUE,
                                   PASSWORD TEXT NOT NULL,
@@ -31,8 +31,8 @@ class UserRepository(IUserRepo):
     def add(self, uname: str, upass: str):
         with self.db.transaction() as cur:
             cur.execute(
-                """INSERT INTO USER(USERNAME, PASSWORD) 
-                                    VALUES(?,?)""",
+                """INSERT INTO USERS(USERNAME, PASSWORD) 
+                                    VALUES(%s,%s)""",
                 (uname, self.sha512(upass)),
             )
 
@@ -40,7 +40,7 @@ class UserRepository(IUserRepo):
         with self.db.transaction() as cur:
             cur.execute(
                 """SELECT USERID , USERNAME , LASTSEEN FROM 
-                    USER WHERE USERNAME = ? AND PASSWORD = ?""",
+                    USERS WHERE USERNAME = %s AND PASSWORD = %s""",
                 (uname, self.sha512(upass)),
             )
             row = cur.fetchone()
@@ -52,9 +52,9 @@ class UserRepository(IUserRepo):
     def update(self, uid: int, new_name: str):
         with self.db.transaction() as cur:
             cur.execute(
-                """UPDATE USER SET USERNAME = ? WHERE USERID = ?""", (new_name, uid)
+                """UPDATE USERS SET USERNAME = %s WHERE USERID = %s""", (new_name, uid)
             )
 
     def delete(self, uid: int):
         with self.db.transaction() as cur:
-            cur.execute("""DELETE FROM USER WHERE USERID = ?""", (uid,))
+            cur.execute("""DELETE FROM USERS WHERE USERID = %s""", (uid,))

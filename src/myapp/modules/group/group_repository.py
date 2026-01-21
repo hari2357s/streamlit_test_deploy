@@ -16,7 +16,7 @@ class GroupRepository(IGroupRepo):
 
     def __init__(self, db: IDatabase) -> None:
         self.db = db
-        self.create_table()
+        # self.create_table()
 
     def create_table(self):
         with self.db.transaction() as cur:
@@ -30,13 +30,13 @@ class GroupRepository(IGroupRepo):
                                   USERID INTEGER NOT NULL,
                                   GROUPID INTEGER NOT NULL,
                                   ROLE TEXT NOT NULL,
-                                  FOREIGN KEY(USERID) REFERENCES USER(USERID) ON DELETE CASCADE,
+                                  FOREIGN KEY(USERID) REFERENCES USERS(USERID) ON DELETE CASCADE,
                                   FOREIGN KEY(GROUPID) REFERENCES GROUPS(ID) ON DELETE CASCADE)""")
 
     def add_member(self, member_id: int, group_id: int, role: str):
         with self.db.transaction() as cur:
             cur.execute(
-                """INSERT INTO USER_GROUP (USERID, GROUPID, ROLE) VALUES(?,?,?)""",
+                """INSERT INTO USER_GROUP (USERID, GROUPID, ROLE) VALUES(%s,%s,%s)""",
                 (member_id, group_id, role),
             )
 
@@ -44,7 +44,7 @@ class GroupRepository(IGroupRepo):
         with self.db.transaction() as cur:
             cur.execute(
                 """INSERT INTO GROUPS (
-                                    NAME) VALUES(?)""",
+                                    NAME) VALUES(%s)""",
                 (group_name,),
             )
             group_id = cur.lastrowid
@@ -59,7 +59,7 @@ class GroupRepository(IGroupRepo):
                 """SELECT G.ID, G.NAME, G.CREATEDAT, UG.ROLE FROM 
                                             GROUPS G JOIN 
                                             USER_GROUP UG ON G.ID = UG.GROUPID WHERE 
-                                            UG.USERID = ?""",
+                                            UG.USERID = %s""",
                 (user_id,),
             )
             grps = cur.fetchall()
@@ -68,9 +68,9 @@ class GroupRepository(IGroupRepo):
     def update(self, new_name: str, group_id: int):
         with self.db.transaction() as cur:
             cur.execute(
-                """UPDATE GROUPS SET NAME = ? WHERE ID = ?""", (new_name, group_id)
+                """UPDATE GROUPS SET NAME = %s WHERE ID = %s""", (new_name, group_id)
             )
 
     def delete(self, group_id: int):
         with self.db.transaction() as cur:
-            cur.execute("""DELETE FROM GROUPS WHERE ID = ?""", (group_id,))
+            cur.execute("""DELETE FROM GROUPS WHERE ID = %s""", (group_id,))

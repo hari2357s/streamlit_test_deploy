@@ -17,7 +17,7 @@ class ChatRepository(IChatRepo):
 
     def __init__(self, db: IDatabase) -> None:
         self.db = db
-        self.create_table()
+        # self.create_table()
 
     def create_table(self):
         """
@@ -35,7 +35,7 @@ class ChatRepository(IChatRepo):
                                   USERID INTEGER NOT NULL,
                                   CHATID INTEGER NOT NULL,
                                   BLOCKED INTEGER DEFAULT 0,
-                                  FOREIGN KEY(USERID) REFERENCES USER(USERID) ON DELETE CASCADE,
+                                  FOREIGN KEY(USERID) REFERENCES USERS(USERID) ON DELETE CASCADE,
                                   FOREIGN KEY(CHATID) REFERENCES CHAT(ID) ON DELETE CASCADE)""")
 
     def add(self, user_id: int, frnd_uid: int):
@@ -52,11 +52,11 @@ class ChatRepository(IChatRepo):
             cur.execute("""INSERT INTO CHAT (NAME) VALUES(NULL)""")
             chat_id = cur.lastrowid
             cur.execute(
-                """INSERT INTO USER_CHAT (USERID, CHATID) VALUES(?,?)""",
+                """INSERT INTO USER_CHAT (USERID, CHATID) VALUES(%s,%s)""",
                 (user_id, chat_id),
             )
             cur.execute(
-                """INSERT INTO USER_CHAT (USERID, CHATID) VALUES(?,?)""",
+                """INSERT INTO USER_CHAT (USERID, CHATID) VALUES(%s,%s)""",
                 (frnd_uid, chat_id),
             )
 
@@ -72,10 +72,10 @@ class ChatRepository(IChatRepo):
         """
         with self.db.transaction() as cur:
             cur.execute(
-                """SELECT UC2.ID, U.USERID, U.USERNAME, UC2.CHATID, UC2.BLOCKED FROM USER U
+                """SELECT UC2.ID, U.USERID, U.USERNAME, UC2.CHATID, UC2.BLOCKED FROM USERS U
                             JOIN USER_CHAT UC1 ON U.USERID = UC1.USERID
                             JOIN USER_CHAT UC2 ON UC1.CHATID = UC2.CHATID
-                            WHERE UC2.USERID = ? AND U.USERID != ?""",
+                            WHERE UC2.USERID = %s AND U.USERID != %s""",
                 (user_id, user_id),
             )
             chats = cur.fetchall()
@@ -93,13 +93,13 @@ class ChatRepository(IChatRepo):
         """
         with self.db.transaction() as cur:
             cur.execute(
-                """SELECT USERID, USERNAME FROM USER
-                            WHERE USERID <> ?
+                """SELECT USERID, USERNAME FROM USERS
+                            WHERE USERID <> %s
                             AND USERID NOT IN (
                                 SELECT UC1.USERID
                                 FROM USER_CHAT UC1
                                 JOIN USER_CHAT UC2 ON UC1.CHATID = UC2.CHATID
-                                WHERE UC2.USERID = ?
+                                WHERE UC2.USERID = %s
                             )""",
                 (user_id, user_id),
             )
@@ -120,7 +120,7 @@ class ChatRepository(IChatRepo):
         """
         with self.db.transaction() as cur:
             cur.execute(
-                """UPDATE USER_CHAT SET BLOCKED = ? WHERE USERID = ? AND CHATID = ?""",
+                """UPDATE USER_CHAT SET BLOCKED = %s WHERE USERID = %s AND CHATID = %s""",
                 (blocked, user_id, chat_id),
             )
 
@@ -133,4 +133,4 @@ class ChatRepository(IChatRepo):
         :type chatID: int
         """
         with self.db.transaction() as cur:
-            cur.execute("""DELETE FROM CHAT WHERE ID = ?""", (chat_id,))
+            cur.execute("""DELETE FROM CHAT WHERE ID = %s""", (chat_id,))

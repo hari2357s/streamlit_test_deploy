@@ -17,7 +17,7 @@ class MessageRepository(IMessageRepo):
 
     def __init__(self, db: IDatabase) -> None:
         self.db = db
-        self.create_table()
+        # self.create_table()
 
     def create_table(self):
         with self.db.transaction() as cur:
@@ -31,7 +31,7 @@ class MessageRepository(IMessageRepo):
                                   SENTAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                   DELIVEREDAT TIMESTAMP ,
                                   SEENAT TIMESTAMP ,
-                                  FOREIGN KEY(USERID) REFERENCES USER(USERID) ON DELETE CASCADE,
+                                  FOREIGN KEY(USERID) REFERENCES USERS(USERID) ON DELETE CASCADE,
                                   FOREIGN KEY(CHATID) REFERENCES CHAT(ID) ON DELETE CASCADE,
                                   FOREIGN KEY(GROUPID) REFERENCES GROUPS(ID) ON DELETE CASCADE
                                 )""")
@@ -46,14 +46,14 @@ class MessageRepository(IMessageRepo):
     ):
         with self.db.transaction() as cur:
             cur.execute(
-                """INSERT INTO MESSAGE (MESSAGE, USERID, CHATID, GROUPID, TYPE) VALUES(?,?,?,?,?)""",
+                """INSERT INTO MESSAGE (MESSAGE, USERID, CHATID, GROUPID, TYPE) VALUES(%s,%s,%s,%s,%s)""",
                 (msg, user_id, chat_id, grp_id, msg_type.value),
             )
 
     def update_msg(self, updated_msg: str, msg_id: int):
         with self.db.transaction() as cur:
             cur.execute(
-                """UPDATE MESSAGE SET MESSAGE = ? WHERE ID = ?""",
+                """UPDATE MESSAGE SET MESSAGE = %s WHERE ID = %s""",
                 (
                     updated_msg,
                     msg_id,
@@ -67,15 +67,15 @@ class MessageRepository(IMessageRepo):
             if chat_id is not None:
                 cur.execute(
                     """SELECT ID, MESSAGE, U.USERID, USERNAME, CHATID, GROUPID, SENTAT, DELIVEREDAT, SEENAT 
-                                FROM MESSAGE M JOIN USER U ON M.USERID = U.USERID 
-                                WHERE CHATID = ? ORDER BY SENTAT """,
+                                FROM MESSAGE M JOIN USERS U ON M.USERID = U.USERID 
+                                WHERE CHATID = %s ORDER BY SENTAT """,
                     (chat_id,),
                 )
             else:
                 cur.execute(
                     """SELECT ID, MESSAGE, U.USERID, U.USERNAME, CHATID, GROUPID, SENTAT, DELIVEREDAT, SEENAT 
-                                FROM MESSAGE M JOIN USER U ON M.USERID = U.USERID
-                                WHERE GROUPID = ?  ORDER BY SENTAT """,
+                                FROM MESSAGE M JOIN USERS U ON M.USERID = U.USERID
+                                WHERE GROUPID = %s  ORDER BY SENTAT """,
                     (group_id,),
                 )
             msgs = cur.fetchall()
@@ -83,4 +83,4 @@ class MessageRepository(IMessageRepo):
 
     def delete_msg(self, msg_id: int):
         with self.db.transaction() as cur:
-            cur.execute("""DELETE FROM MESSAGE WHERE ID = ?""", (msg_id,))
+            cur.execute("""DELETE FROM MESSAGE WHERE ID = %s""", (msg_id,))
