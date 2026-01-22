@@ -29,7 +29,7 @@ class SupaBaseDatabase_V2(IDatabase):
                 password=PASSWORD,
                 host=HOST,
                 port=PORT,
-                dbname=DBNAME
+                dbname=DBNAME,
             )
         except Exception as exc:
             raise ConnectionError("Database connection failed") from exc
