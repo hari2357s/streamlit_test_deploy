@@ -5,22 +5,13 @@ import streamlit as st
 # Load environment variables from .env
 load_dotenv()
 
-# Fetch variables
-USER = os.getenv("DB_USER")
-PASSWORD = os.getenv("DB_PASSWORD")
-HOST = os.getenv("DB_HOST")
-PORT = os.getenv("DB_PORT")
-DBNAME = os.getenv("DBNAME")
+DB_URL = os.getenv("DB_URL")
 
 # Connect to the database
 try:
-    st.write(USER,PASSWORD,HOST,PORT,DBNAME)
     connection = psycopg2.connect(
-        user=USER,
-        password=PASSWORD,
-        host=HOST,
-        port=PORT,
-        dbname=DBNAME
+        DB_URL,
+        connect_timeout=20
     )
     st.write("Connection successful!")
     
