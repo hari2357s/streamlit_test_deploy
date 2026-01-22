@@ -16,7 +16,11 @@ DBNAME = os.getenv("DBNAME")
 try:
     st.write(USER,PASSWORD,HOST,PORT,DBNAME)
     connection = psycopg2.connect(
-        os.environ["DATABASE_URL"]
+        user=USER,
+        password=PASSWORD,
+        host=HOST,
+        port=PORT,
+        dbname=DBNAME
     )
     st.write("Connection successful!")
     
