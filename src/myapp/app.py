@@ -4,18 +4,18 @@ import os
 import streamlit as st
 # Load environment variables from .env
 load_dotenv()
-
+from time import perf_counter
 # Fetch variables
 # DB_URL = os.getenv("DB_URL")
 DB_URL = "postgresql://postgres.uzklqxaqtfigzorkirqx:WM5GYvAe91tN2GAJ@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
 
 # Connect to the database
 try:
+    st_time = perf_counter()
     connection = psycopg2.connect(
         DB_URL,
-        connect_timeout=20
     )
-    st.write("Connection successful!")
+    st.write("Connection successful!", perf_counter()-st_time, 'secs')
     
     # Create a cursor to execute SQL queries
     cursor = connection.cursor()
