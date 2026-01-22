@@ -23,6 +23,7 @@ class SupaBaseDatabase_V2(IDatabase):
         HOST = os.getenv("host")
         PORT = os.getenv("port")
         DBNAME = os.getenv("dbname")
+        print(DBNAME)
         try:
             self._conn = psycopg2.connect(
                 user=USER,
