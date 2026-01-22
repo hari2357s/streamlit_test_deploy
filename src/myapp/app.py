@@ -12,7 +12,8 @@ DB_URL = "postgresql://postgres.uzklqxaqtfigzorkirqx:WM5GYvAe91tN2GAJ@aws-1-ap-s
 # Connect to the database
 try:
     connection = psycopg2.connect(
-        DB_URL
+        DB_URL,
+        connect_timeout=20
     )
     st.write("Connection successful!")
     
