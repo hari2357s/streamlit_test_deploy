@@ -5,13 +5,14 @@ import streamlit as st
 # Load environment variables from .env
 load_dotenv()
 
-DB_URL = os.getenv("DB_URL")
+# Fetch variables
+# DB_URL = os.getenv("DB_URL")
+DB_URL = "postgresql://postgres.uzklqxaqtfigzorkirqx:WM5GYvAe91tN2GAJ@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
 
 # Connect to the database
 try:
     connection = psycopg2.connect(
-        DB_URL,
-        connect_timeout=20
+        DB_URL
     )
     st.write("Connection successful!")
     
@@ -19,7 +20,7 @@ try:
     cursor = connection.cursor()
     
     # Example query
-    cursor.execute("SELECT NOW();")
+    cursor.execute("SELECT * FROM USERS;")
     result = cursor.fetchone()
     st.write("Current Time:", result)
 
