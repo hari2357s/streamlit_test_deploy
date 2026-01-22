@@ -18,7 +18,7 @@ try:
     connection = psycopg2.connect(
         os.environ["DATABASE_URL"]
     )
-    print("Connection successful!")
+    st.write("Connection successful!")
     
     # Create a cursor to execute SQL queries
     cursor = connection.cursor()
@@ -26,15 +26,15 @@ try:
     # Example query
     cursor.execute("SELECT NOW();")
     result = cursor.fetchone()
-    print("Current Time:", result)
+    st.write("Current Time:", result)
 
     # Close the cursor and connection
     cursor.close()
     connection.close()
-    print("Connection closed.")
+    st.write("Connection closed.")
 
 except Exception as e:
-    print(f"Failed to connect: {e}")
+    st.write(f"Failed to connect: {e}")
 
 
 
