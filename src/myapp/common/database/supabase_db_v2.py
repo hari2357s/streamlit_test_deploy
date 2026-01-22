@@ -22,12 +22,11 @@ class SupaBaseDatabase_V2(IDatabase):
         # PASSWORD = os.getenv("DB_PASSWORD")
         # HOST = os.getenv("DB_HOST")
         # PORT = os.getenv("DB_PORT")
-        # DB_URL = os.getenv("DB_URL")
-        DB_URL = "postgresql://postgres.uzklqxaqtfigzorkirqx:WM5GYvAe91tN2GAJ@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
+        DB_URL = os.getenv("DB_URL")
         try:
             self._conn = psycopg2.connect(
-        DB_URL,
-      )
+                DB_URL,
+            )
         except Exception as exc:
             raise ConnectionError("Database connection failed") from exc
 
