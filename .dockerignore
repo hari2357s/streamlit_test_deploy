@@ -12,3 +12,4 @@ build/
 src/myapp.egg-info/
 build_test.py
 .env
+.gitignore
