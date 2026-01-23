@@ -1,39 +1,3 @@
-# import psycopg2
-# from dotenv import load_dotenv
-# import os
-# import streamlit as st
-# # Load environment variables from .env
-# load_dotenv()
-# from time import perf_counter
-# # Fetch variables
-# # DB_URL = os.getenv("DB_URL")
-# DB_URL = ""
-
-# # Connect to the database
-# try:
-#     st_time = perf_counter()
-#     connection = psycopg2.connect(
-#         DB_URL,
-#     )
-#     st.write("Connection successful!", perf_counter()-st_time, 'secs')
-    
-#     # Create a cursor to execute SQL queries
-#     cursor = connection.cursor()
-    
-#     # Example query
-#     cursor.execute("SELECT * FROM USERS;")
-#     result = cursor.fetchone()
-#     st.write("Current Time:", result)
-
-#     # Close the cursor and connection
-#     cursor.close()
-#     connection.close()
-#     st.write("Connection closed.")
-
-# except Exception as e:
-#     st.write(f"Failed to connect: {e}")
-
-
 """
 Docstring for myapp.App
 """

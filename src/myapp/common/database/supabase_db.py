@@ -3,7 +3,6 @@ from collections.abc import Iterator
 
 import supabase
 import os
-from streamlit import secrets
 from postgrest import exceptions
 from .database import IDatabase
 from dotenv import load_dotenv
