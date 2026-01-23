@@ -6,8 +6,7 @@
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["src"]requires-python = ">=3.10,<3.11"
-
+where = ["src"]
 
 [project]
 name = "myapp"
@@ -31,4 +30,3 @@ exclude = ["tests"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-
