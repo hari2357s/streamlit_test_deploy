@@ -13,3 +13,4 @@ jobs:
         run: |
           docker login --username hari2357s --password ${{ secrets.GH_PT}} ghcr.io
           docker build . --tag ghcr.io/hari2357s/talksy_test:latest 
+          docker push ghcr.io/hari2357s/talksy_test:latest 
